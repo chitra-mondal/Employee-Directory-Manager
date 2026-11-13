@@ -1,0 +1,124 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Employee Directory Manager</title>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <h1>Employee Directory Manager</h1>
+    
+    <div class="user-bar">
+        <span>Logged in as: {{ session['username'] }}</span>
+        <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+    </div>
+
+
+    <h2>Add Employee</h2>
+
+    
+    <form action="/add" method="POST">
+        <input type="text" name="emp_id"
+               placeholder="Employee ID" required>
+
+        <input type="text" name="name"
+               placeholder="Employee Name" required>
+
+        <label>Birthdate:</label>
+        <input type="date" name="birthdate" required>
+
+        <label>Joining Date:</label>
+        <input type="date" name="joining_date" required>
+
+        <input type="text" name="post"
+               placeholder="Post / Designation">
+
+        <input type="tel" name="phone"
+               placeholder="Phone Number">
+
+        <input type="number" name="salary"
+               placeholder="Salary" min="0" step="0.01">
+
+        <textarea name="address"
+                  placeholder="Address"></textarea>
+
+        <input type="email" name="email"
+               placeholder="Email Address">
+
+        <button type="submit">Add Employee</button>
+    </form>
+
+    
+    
+<form action="/" method="GET">
+    <input type="text" name="search"
+           placeholder="Search by Employee ID or Name"
+           value="{{ search }}">
+
+    <label>Sort by:</label>
+    <select name="sort_by">
+        <option value="emp_id"
+            {% if sort_by == 'emp_id' %}selected{% endif %}>
+            Employee ID
+        </option>
+
+        <option value="name"
+            {% if sort_by == 'name' %}selected{% endif %}>
+            Name
+        </option>
+
+        <option value="salary"
+            {% if sort_by == 'salary' %}selected{% endif %}>
+            Salary
+        </option>
+    </select>
+
+    <button type="submit">Search / Sort</button>
+    <a href="/">Show All</a>
+</form>
+
+
+    
+    <h2>Employee Records</h2>
+
+    <table>
+        <tr>
+            <th>Employee ID</th>
+            <th>Name</th>
+            <th>Birthdate</th>
+            <th>Joining Date</th>
+            <th>Post</th>
+            <th>Phone</th>
+            <th>Salary</th>
+            <th>Address</th>
+            <th>Email</th>
+            <th>Action</th>
+        </tr>
+
+        {% for emp_id, details in employees.items() %}
+        <tr>
+            <td>{{ emp_id }}</td>
+            <td>{{ details[0] }}</td>
+            <td>{{ details[1] }}</td>
+            <td>{{ details[2] }}</td>
+            <td>{{ details[3] }}</td>
+            <td>{{ details[4] }}</td>
+            <td>{{ details[5] }}</td>
+            <td>{{ details[6] }}</td>
+            <td>{{ details[7] }}</td>
+            <td>
+                <a href="/update/{{ emp_id }}">Update</a> |
+                <a href="/delete/{{ emp_id }}"
+                   onclick="return confirm('Delete this employee?')">
+                    Delete
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+
+</body>
+</html>
